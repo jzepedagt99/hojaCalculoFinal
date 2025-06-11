@@ -10,10 +10,10 @@ public class Celda {
     private String formula; // Ejemplo =SUMA((0,0),(0,1))
     private Double valorCalculado;
 
-    private HojaCalculo hojaPadre;
+    private HojaCalculo hojaCalculo;
 
-    public Celda(HojaCalculo hojaPadre) {
-        this.hojaPadre = hojaPadre;
+    public Celda(HojaCalculo hojaCalculo) {
+        this.hojaCalculo = hojaCalculo;
         this.valorMostrado = "";
         this.formula = null;
         this.valorCalculado = null;
@@ -36,14 +36,13 @@ public class Celda {
 
         if (ParserFormulas.esFormula(valor)) {
             this.formula = valor;
-            evaluarFormula(); // Intentar evaluar inmediatamente
+            evaluarFormula();
         } else {
             this.formula = null;
             try {
                 this.valorCalculado = Double.parseDouble(valor);
                 this.valorMostrado = valor;
             } catch (NumberFormatException e) {
-                // Si no es fórmula y no es número, tratar como texto simple
                 this.valorCalculado = null; // No hay valor numérico calculable
                 this.valorMostrado = valor; // Mostrar el texto tal cual                
             }
@@ -55,10 +54,10 @@ public class Celda {
      * Actualiza valorCalculado y valorMostrado.
      */
     public void evaluarFormula() {
-        if (this.formula != null && this.hojaPadre != null) {
+        if (this.formula != null && this.hojaCalculo != null) {
             try {
 
-                this.valorCalculado = ParserFormulas.parsearYCalcular(this.formula, this.hojaPadre);
+                this.valorCalculado = ParserFormulas.parsearYCalcular(this.formula, this.hojaCalculo);
                 this.valorMostrado = (this.valorCalculado != null) ? String.valueOf(this.valorCalculado) : "#ERROR_FORMULA";
             } catch (Exception e) {
                 System.err.println("Error al evaluar la fórmula '" + this.formula + "': " + e.getMessage());
@@ -72,7 +71,7 @@ public class Celda {
     }
 
     public void setHojaPadre(HojaCalculo hoja) {
-        this.hojaPadre = hoja;
+        this.hojaCalculo = hoja;
     }
     
     public String getValorMostrado() {
