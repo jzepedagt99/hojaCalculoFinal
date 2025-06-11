@@ -6,54 +6,94 @@ package modelo;
  * @author jzepeda
  */
 public class Celda {
-    private String contenidoIngresado; // Ej: "10", "Hola", "=A1+B1"
-    private Object valorCalculado;    // Ej: 10, "Hola", resultado de A1+B1
-    private String formula;           // Ej: "A1+B1" (si es una fórmula)
-    // Podría tener referencias a celdas que dependen de esta (observadores)
-    // y celdas de las que esta depende.
-    
-     public Celda(String contenido) {
-        setContenidoIngresado(contenido);
+    private String valorMostrado;
+    private String formula; // Ejemplo =SUMA((0,0),(0,1))
+    private Double valorCalculado;
+
+    private HojaCalculo hojaPadre;
+
+    public Celda(HojaCalculo hojaPadre) {
+        this.hojaPadre = hojaPadre;
+        this.valorMostrado = "";
+        this.formula = null;
+        this.valorCalculado = null;
     }
 
-    public void setContenidoIngresado(String contenido) {
-        this.contenidoIngresado = contenido;
-        // Lógica para determinar si es una fórmula y parsearla
-        if (contenido != null && contenido.startsWith("=")) {
-            this.formula = contenido.substring(1);
-            // Dejar el cálculo para después o marcar como "necesita recalcular"
-            this.valorCalculado = null; // O un placeholder
+    /**
+     * Establece el contenido de la celda.
+     * Puede ser un valor numérico directo o una fórmula.
+     * @param valor El valor o fórmula a ingresar.
+     */
+    public void setContenido(String valor) {
+        if (valor == null || valor.trim().isEmpty()) {
+            this.formula = null;
+            this.valorCalculado = null;
+            this.valorMostrado = "";
+            return;
+        }
+
+        valor = valor.trim();
+
+        if (ParserFormulas.esFormula(valor)) {
+            this.formula = valor;
+            evaluarFormula(); // Intentar evaluar inmediatamente
         } else {
             this.formula = null;
-            // Intentar convertir a número si es posible, sino tratar como texto
             try {
-                this.valorCalculado = Double.parseDouble(contenido);
+                this.valorCalculado = Double.parseDouble(valor);
+                this.valorMostrado = valor;
             } catch (NumberFormatException e) {
-                this.valorCalculado = contenido;
+                // Si no es fórmula y no es número, tratar como texto simple
+                this.valorCalculado = null; // No hay valor numérico calculable
+                this.valorMostrado = valor; // Mostrar el texto tal cual                
             }
         }
     }
 
-    public String getContenidoIngresado() {
-        return contenidoIngresado;
+    /**
+     * Evalúa la fórmula almacenada en esta celda.
+     * Actualiza valorCalculado y valorMostrado.
+     */
+    public void evaluarFormula() {
+        if (this.formula != null && this.hojaPadre != null) {
+            try {
+
+                this.valorCalculado = ParserFormulas.parsearYCalcular(this.formula, this.hojaPadre);
+                this.valorMostrado = (this.valorCalculado != null) ? String.valueOf(this.valorCalculado) : "#ERROR_FORMULA";
+            } catch (Exception e) {
+                System.err.println("Error al evaluar la fórmula '" + this.formula + "': " + e.getMessage());
+                this.valorCalculado = null;
+                this.valorMostrado = "#ERROR_FORMULA";
+            }
+        } else if (this.formula == null && this.valorCalculado != null) {
+            
+        } else if (this.formula == null && this.valorCalculado == null && (this.valorMostrado != null && !this.valorMostrado.isEmpty())) {            
+        }
     }
 
-    public Object getValorCalculado() {
-        // Aquí podría ir la lógica de evaluación si no se hizo antes
-        // o si necesita ser recalculado.
-        return valorCalculado;
+    public void setHojaPadre(HojaCalculo hoja) {
+        this.hojaPadre = hoja;
     }
-
-    public void setValorCalculado(Object valor) {
-        this.valorCalculado = valor;
+    
+    public String getValorMostrado() {
+        return valorMostrado;
     }
 
     public String getFormula() {
         return formula;
     }
 
-    public boolean esFormula() {
-        return formula != null;
+    public Double getValorCalculado() {
+        return valorCalculado;
+    }
+
+    @Override
+    public String toString() {
+        return "Celda{" +
+               "valorMostrado='" + valorMostrado + '\'' +
+               ", formula='" + formula + '\'' +
+               ", valorCalculado=" + valorCalculado +
+               '}';
     }
     
 }

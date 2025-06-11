@@ -1,11 +1,7 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package main;
 
 import javax.swing.SwingUtilities;
-import modelo.LibroTrabajo;
+import modelo.HojaCalculo;
 import view.VentanaPrincipal;
 
 /**
@@ -14,18 +10,20 @@ import view.VentanaPrincipal;
  */
 public class main {
     public static void main(String[] args) {
-        // 1. Crear el modelo (LibroTrabajo)
-        LibroTrabajo libro = new LibroTrabajo();
-        // Hoja hojaInicial = libro.crearNuevaHoja("Hoja1"); // El controlador lo haría
+        final HojaCalculo hojaDeCalculo = new HojaCalculo(30, 16);
 
-        // 2. Crear la vista, pasándole el modelo
+        // Datos de prueba
+        hojaDeCalculo.setContenidoCelda(0, 0, "10");
+        hojaDeCalculo.setContenidoCelda(0, 1, "20");
+       
+        // Ejemplo de como podria ingresar una formula desde el codigo         
+        // hojaDeCalculo.setContenidoCelda(1, 3, "=SUMA((0,0),(0,1))");
+
         SwingUtilities.invokeLater(() -> {
-            VentanaPrincipal ventana = new VentanaPrincipal(libro);
+            
+            VentanaPrincipal ventana = new VentanaPrincipal(hojaDeCalculo);           
+            ventana.actualizarTablaConModeloCompleto();
             ventana.setVisible(true);
         });
-        // 3. (Faltante aquí) Crear el Controlador, pasándole el modelo y la vista.
-        // ControladorHojaCalculo controlador = new ControladorHojaCalculo(libro, ventana);
-        // El controlador se encargaría de añadir la primera hoja a la vista si es necesario
-        // por ejemplo, llamando a ventana.añadirNuevaHoja("Hoja1");
     }
 }
