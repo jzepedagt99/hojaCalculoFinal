@@ -24,5 +24,6 @@ public class main {
             ventana.actualizarTablaConModeloCompleto();
             ventana.setVisible(true);
         });
+         
     }
 }

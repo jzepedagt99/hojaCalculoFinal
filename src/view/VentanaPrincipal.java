@@ -24,6 +24,7 @@ import modelo.HojaCalculo;
 public class VentanaPrincipal extends JFrame {
     
     private JTable tabla;
+    
     private DefaultTableModel modeloTabla;
     private JTextField campoFormula;
     private JButton btnAplicar;

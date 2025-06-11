@@ -71,7 +71,7 @@ public class HojaCalculo {
         return matrizCeldas;
     }
     
-    public int getFilas() {
+    public int getFilas() { 
         return filas;
     }
 

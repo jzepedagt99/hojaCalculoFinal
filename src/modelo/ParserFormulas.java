@@ -140,6 +140,7 @@ public class ParserFormulas {
             throw new IllegalArgumentException("Argumentos de fórmula no contienen coordenadas válidas: " + argumentosString);
         }
         return celdas;
+        
     }
 
     public static void main(String[] args) {

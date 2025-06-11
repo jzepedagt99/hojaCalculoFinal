@@ -7,7 +7,7 @@ package modelo;
  */
 public class Celda {
     private String valorMostrado;
-    private String formula; // Ejemplo =SUMA((0,0),(0,1))
+    private String formula;
     private Double valorCalculado;
 
     private HojaCalculo hojaCalculo;
@@ -53,6 +53,7 @@ public class Celda {
      * Evalúa la fórmula almacenada en esta celda.
      * Actualiza valorCalculado y valorMostrado.
      */
+    
     public void evaluarFormula() {
         if (this.formula != null && this.hojaCalculo != null) {
             try {
