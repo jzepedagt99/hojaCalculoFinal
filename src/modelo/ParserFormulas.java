@@ -21,11 +21,11 @@ public class ParserFormulas {
 
     /**
      * Verifica si lo ingresado es una formula
-     * @param input Contenido a validar.
+     * @param contenido valor a validar.
      * @return true si comienza con "=", false si no.
      */
-    public static boolean esFormula(String input) {
-        return input != null && input.startsWith("=");
+    public static boolean esFormula(String contenido) {
+        return contenido != null && contenido.startsWith("=");
     }
 
     /**
@@ -55,7 +55,6 @@ public class ParserFormulas {
                         return num1 * num2;
                     
                     default:
-                        // Este caso no debería ocurrir si el regex es correcto
                         throw new IllegalArgumentException("Operador aritmético desconocido: " + operador);
                 }
             } catch (NumberFormatException e) {

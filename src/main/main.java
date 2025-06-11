@@ -12,7 +12,6 @@ public class main {
     public static void main(String[] args) {
         final HojaCalculo hojaDeCalculo = new HojaCalculo(30, 16);
 
-        // Datos de prueba
         hojaDeCalculo.setContenidoCelda(0, 0, "10");
         hojaDeCalculo.setContenidoCelda(0, 1, "20");
        
